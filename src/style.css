@@ -103,3 +103,19 @@ li .todo {
 li .todo.done {
     background: #333;
 }
+
+.filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.filters button {
+    background: #ddd;
+    color: #333;
+}
+
+.filters button.active {
+    background: #4a69bd;
+    color: white;
+}
