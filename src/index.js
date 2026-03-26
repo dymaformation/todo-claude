@@ -18,6 +18,17 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
+let currentFilter = 'all';
+
+document.querySelectorAll('.filters button').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    currentFilter = btn.dataset.filter;
+    document.querySelectorAll('.filters button').forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+    displayTodo();
+  });
+});
+
 const todos = [
   {
     text: 'Faire du JavaScript',
@@ -27,15 +38,18 @@ const todos = [
 ];
 
 const displayTodo = () => {
-  const todosNode = todos.map((todo, index) => {
-    if (todo.editMode) {
-      return createTodoEditElement(todo, index);
-    } else {
-      return createTodoElement(todo, index);
-    }
-  });
+  const filtered = todos
+    .map((todo, index) => ({ todo, index }))
+    .filter(({ todo }) => {
+      if (currentFilter === 'active') return !todo.done;
+      if (currentFilter === 'done') return todo.done;
+      return true;
+    });
+  const todosNode = filtered.map(({ todo, index }) =>
+    todo.editMode ? createTodoEditElement(todo, index) : createTodoElement(todo, index)
+  );
   ul.innerHTML = '';
-  ul.append(...todosNode);
+  if (todosNode.length) ul.append(...todosNode);
 };
 
 const createTodoElement = (todo, index) => {
